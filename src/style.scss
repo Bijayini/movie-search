@@ -1,3 +1,17 @@
 h1 {
   color: #269fad;
 }
+ul {
+  display: grid;
+  grid-gap: 20px;
+  width: 750px;
+  grid-template-columns: 200px 200px 200px;
+  list-style-type: none;
+  li {
+    border: 1px solid #f40e0e;
+    border-radius: 3px;
+    font-size: 22px;
+    text-align: center;
+    padding: 40px 0;
+  }
+}
