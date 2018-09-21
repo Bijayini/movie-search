@@ -15,7 +15,13 @@ export default class App extends React.Component {
     this.setState({ sortingParam: e.target.value });
   }
 
+  componentDidMount(){
+    console.log('Hi I have mounted the component');
+  };
+
+
   render() {
+    console.log('Yeah!!! I am inside render');
     return (
       <div className="container-left">
         <div className="list-header">
