@@ -1,29 +1,49 @@
 import React from 'react';
+import {isEqual, uniqBy} from 'lodash';
 
-import {Movies} from '../constants';
+import {URL} from '../constants';
 
 import MovieCard from '../MovieCard';
 
-const getMovieListSortedByParam = (sortingParam) => Movies.sort((movie1, movie2) => {
-  const firstMovie = movie1[sortingParam].toLowerCase();
-  const secondMovie = movie2[sortingParam].toLowerCase();
+export default class MovieList extends React.Component{
+  constructor(props){
+    super(props);
+    this.state={
+      movies:[]
+    }
+  }
 
-  return (firstMovie > secondMovie) ? 1 : ((secondMovie > firstMovie) ? -1 : 0);
-});
+  componentDidMount(){
+    fetch(URL).then(results => results.json())
+    .then(data => this.setState({ movies: uniqBy(data.movies, 'title')}));
+  };
 
 
-const getSortedMovieList = (sortingParam)=> {
-   return sortingParam !== '' ? getMovieListSortedByParam(sortingParam): Movies;
-}
+  getMovieListSortedByParam = () => {
+    const {sortingParam} = this.props;
+    const {movies} = this.state;
 
-const MovieList = (props) => {
-  const sortedMovieList = getSortedMovieList(props.sortingParam);
-  return(
-      <ul>
-        {Movies.map( movie => <MovieCard movie={movie} key={movie.id}/> )}
-      </ul>
-  );
+    return( movies.sort((movie1, movie2) => {
+      const firstMovie = movie1[sortingParam].toLowerCase();
+      const secondMovie = movie2[sortingParam].toLowerCase();
+
+      return (firstMovie > secondMovie) ? 1 : ((secondMovie > firstMovie) ? -1 : 0);
+    }));
+  };
+
+   getSortedMovieList = () => {
+     const { sortingParam } = this.props;
+
+     return sortingParam !== '' ? this.getMovieListSortedByParam(): this.state.movies;
+  };
+
+  render(){
+    const {movies} = this.state;
+
+    return(
+        <ul>
+          {movies.length > 0 && this.getSortedMovieList().map( movie => <MovieCard movie={movie} key={movie.title} /> )}
+        </ul>
+    );
+  }
 };
-
-
-export default MovieList;

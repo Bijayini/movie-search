@@ -19,7 +19,6 @@ export default class App extends React.Component {
     console.log('Hi I have mounted the component');
   };
 
-
   render() {
     console.log('Yeah!!! I am inside render');
     return (
